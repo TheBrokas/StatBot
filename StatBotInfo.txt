@@ -1,16 +1,44 @@
 {
-    "173260985111543808": {
-        "username": "Brokas",
+    "186891865889570817": {
+        "username": "F1re",
         "games": 1,
         "wins": 1,
         "kills": [
-            14
+            15
         ],
         "deaths": [
             15
         ],
         "assists": [
             5
+        ]
+    },
+    "173260985111543808": {
+        "username": "Brokas",
+        "games": 1,
+        "wins": 1,
+        "kills": [
+            5
+        ],
+        "deaths": [
+            5
+        ],
+        "assists": [
+            5
+        ]
+    },
+    "90559730715467776": {
+        "username": "MtB_",
+        "games": 1,
+        "wins": 0,
+        "kills": [
+            12
+        ],
+        "deaths": [
+            16
+        ],
+        "assists": [
+            2
         ]
     }
 }

@@ -70,7 +70,7 @@ async def on_message(message):
             with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
 
-    if message.content.startswith('!stats'):
+    if message.content == '!mystats':
         username = str(message.author.id)
         with open('StatBotInfo.txt') as json_file:
             data = json.load(json_file)
@@ -86,8 +86,30 @@ async def on_message(message):
         stat_reply = '%s: \nGames Played: %s \nWinrate: %s \nKD: %s' % (name, total_games, win_rate, kd)
         await message.channel.send(stat_reply)
 
+    if message.content.startswith('!stats'):
+        find_user = message.content
+        prefix,username = find_user.split(' ')
+        with open('StatBotInfo.txt') as json_file:
+            data = json.load(json_file)
+            if str(username) in data:
+                with open('StatBotInfo.txt') as json_file:
+                    data = json.load(json_file)
+                    name = data[username]['username']
+                    total_kills = data[username]['kills']
+                    total_kills = sum(total_kills)
+                    total_deaths = data[username]['deaths']
+                    total_deaths = sum(total_deaths)
+                    kd = total_kills / total_deaths
+                    total_games = data[username]['games']
+                    total_wins = data[username]['wins']
+                    win_rate = total_wins / total_games
+                stat_reply = '%s: \nGames Played: %s \nWinrate: %s \nKD: %s' % (name, total_games, win_rate, kd)
+                await message.channel.send(stat_reply)
+            else:
+                await message.channel.send('User not found')
+        
     if message.content.startswith('!help'):
-        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!stats to check stats. \n!selfdestruct to close temporarily'
+        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!mystats to check own stats. \n"!stats userid" to find user stats. \n!selfdestruct to close temporarily'
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
