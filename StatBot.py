@@ -28,7 +28,7 @@ async def on_message(message):
                 data = json.load(json_file)
             user_message = message.content
             prefix,match_info=user_message.split(' ')
-            username = message.author.name 
+            username = str(message.author.id)
             #await message.channel.send(content)
             outcome,kda = match_info.split('-')
             kill_str,death_str,assists_str = kda.split('/')
@@ -38,6 +38,7 @@ async def on_message(message):
 
             if str(username) in data:
                 print('user found')
+                data[username]['username'] = message.author.name
                 data[username]['games'] += 1
                 data[username]['kills'].append(kill)
                 data[username]['deaths'].append(death)
@@ -46,6 +47,7 @@ async def on_message(message):
                     data[username]['wins'] += 1  
             else:
                 data[username] = {
+                    'username': message.author.name,
                     'games': 1,
                     'wins': 0,
                     'kills': [],
@@ -69,9 +71,10 @@ async def on_message(message):
                 json.dump(data, f, ensure_ascii=False, indent=4)
 
     if message.content.startswith('!stats'):
-        username = message.author.name
+        username = str(message.author.id)
         with open('StatBotInfo.txt') as json_file:
             data = json.load(json_file)
+            name = data[username]['username']
             total_kills = data[username]['kills']
             total_kills = sum(total_kills)
             total_deaths = data[username]['deaths']
@@ -80,11 +83,11 @@ async def on_message(message):
             total_games = data[username]['games']
             total_wins = data[username]['wins']
             win_rate = total_wins / total_games
-        stat_reply = '%s, Games Played: %s Winrate: %s KD: %s' % (username, total_games, win_rate, kd)
+        stat_reply = '%s: \nGames Played: %s \nWinrate: %s \nKD: %s' % (name, total_games, win_rate, kd)
         await message.channel.send(stat_reply)
 
     if message.content.startswith('!help'):
-        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. !stats to check stats. !selfdestruct to close temporarily'
+        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!stats to check stats. \n!selfdestruct to close temporarily'
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):

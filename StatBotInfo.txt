@@ -1,15 +1,16 @@
 {
-    "Brokas": {
-        "games": 0,
-        "wins": 0,
+    "173260985111543808": {
+        "username": "Brokas",
+        "games": 1,
+        "wins": 1,
         "kills": [
-            
+            14
         ],
         "deaths": [
-            
+            15
         ],
         "assists": [
-            
+            5
         ]
     }
 }
