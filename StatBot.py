@@ -28,44 +28,58 @@ async def on_message(message):
             with open('StatBotInfo.txt') as json_file:
                 data = json.load(json_file)
             user_message = message.content
-            prefix,match_info=user_message.split(' ')
-            username = str(message.author.id)
-            #await message.channel.send(content)
-            outcome,kda = match_info.split('-')
-            kill_str,death_str,assists_str = kda.split('/')
-            if kill_str.isnumeric() and death_str.isnumeric() and assists_str.isnumeric():
-                kill = abs(int(kill_str))
-                death = abs(int(death_str))
-                assists = abs(int(assists_str))
-                if str(username) in data:
-                    print('user found')
-                    data[username]['username'] = re.sub(r'\W+', '', message.author.name)
-                    data[username]['games'] += 1
-                    data[username]['kills'].append(kill)
-                    data[username]['deaths'].append(death)
-                    data[username]['assists'].append(assists)
-                    if outcome.upper() == 'W':
-                        data[username]['wins'] += 1  
-                else:
-                    data[username] = {
-                        'username': re.sub(r'\W+', '', message.author.name),
-                        'games': 1,
-                        'wins': 0,
-                        'kills': [],
-                        'deaths': [],
-                        'assists': [],
-                    }
-                    data[username]['kills'].append(kill)
-                    data[username]['deaths'].append(death)
-                    data[username]['assists'].append(assists)
-                    if outcome.upper() == 'W':
-                        data[username]['wins'] += 1      
-
-                await message.channel.send('Match Added.')
-                with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
+            try:
+                prefix,match_info=user_message.split(' ')
+            except:
+                print('value error msg')
+                await message.channel.send('Invalid input, try again.')
             else:
-                 await message.channel.send('Invalid formating, try again.')
+                username = str(message.author.id)
+                #await message.channel.send(content)
+                try:
+                    outcome,kda = match_info.split('-')
+                except:
+                    print('value error msg')
+                    await message.channel.send('Invalid input, try again.')
+                else:
+                    try:
+                        kill_str,death_str,assists_str = kda.split('/')
+                    except:
+                        print('value error msg')
+                        await message.channel.send('Invalid input, try again.')
+                    if kill_str.isnumeric() and death_str.isnumeric() and assists_str.isnumeric():
+                        kill = abs(int(kill_str))
+                        death = abs(int(death_str))
+                        assists = abs(int(assists_str))
+                        if str(username) in data:
+                            print('user found')
+                            data[username]['username'] = re.sub(r'\W+', '', message.author.name)
+                            data[username]['games'] += 1
+                            data[username]['kills'].append(kill)
+                            data[username]['deaths'].append(death)
+                            data[username]['assists'].append(assists)
+                            if outcome.upper() == 'W':
+                                data[username]['wins'] += 1  
+                        else:
+                            data[username] = {
+                                'username': re.sub(r'\W+', '', message.author.name),
+                                'games': 1,
+                                'wins': 0,
+                                'kills': [],
+                                'deaths': [],
+                                'assists': [],
+                            }
+                            data[username]['kills'].append(kill)
+                            data[username]['deaths'].append(death)
+                            data[username]['assists'].append(assists)
+                            if outcome.upper() == 'W':
+                                data[username]['wins'] += 1      
+
+                        await message.channel.send('Match Added.')
+                        with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
+                            json.dump(data, f, ensure_ascii=False, indent=4)
+                    else:
+                        await message.channel.send('Invalid formating, try again.')
         else:
             data = {
              }
