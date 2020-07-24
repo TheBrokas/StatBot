@@ -1,44 +1,92 @@
 {
     "186891865889570817": {
         "username": "F1re",
-        "games": 1,
-        "wins": 1,
-        "kills": [
-            15
-        ],
-        "deaths": [
-            15
-        ],
-        "assists": [
-            5
-        ]
+        "games": 0,
+        "wins": 0,
+        "kills": [],
+        "deaths": [],
+        "assists": []
     },
     "173260985111543808": {
         "username": "Brokas",
-        "games": 1,
-        "wins": 1,
+        "games": 4,
+        "wins": 2,
         "kills": [
-            5
+            21,
+            19,
+            66,
+            8
         ],
         "deaths": [
-            5
+            15,
+            20,
+            66,
+            8
         ],
         "assists": [
-            5
+            1,
+            7,
+            66,
+            8
         ]
     },
     "90559730715467776": {
         "username": "MtB_",
+        "games": 2,
+        "wins": 1,
+        "kills": [
+            12,
+            4
+        ],
+        "deaths": [
+            16,
+            17
+        ],
+        "assists": [
+            2,
+            4
+        ]
+    },
+    "175812641124646912": {
+        "username": "swaglord",
+        "games": 1,
+        "wins": 1,
+        "kills": [
+            500
+        ],
+        "deaths": [
+            1
+        ],
+        "assists": [
+            1
+        ]
+    },
+    "155487105726939136": {
+        "username": "Kai",
+        "games": 1,
+        "wins": 1,
+        "kills": [
+            2
+        ],
+        "deaths": [
+            0
+        ],
+        "assists": [
+            14
+        ]
+    },
+    "173260064524599296": {
+        "username": "papi",
         "games": 1,
         "wins": 0,
         "kills": [
-            12
+            0
         ],
         "deaths": [
-            16
+            0
         ],
         "assists": [
-            2
+            0
         ]
     }
 }
