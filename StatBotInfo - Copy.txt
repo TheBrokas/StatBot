@@ -3,8 +3,6 @@
         "username": "F1re",
         "games": 0,
         "wins": 0,
-	    "losses": 0,
-        "ties": 0,
         "kills": [],
         "deaths": [],
         "assists": []
@@ -13,8 +11,6 @@
         "username": "Brokas",
         "games": 3,
         "wins": 3,
-        "losses": 0,
-        "ties": 0,
         "kills": [
             21,
             19,
@@ -35,8 +31,6 @@
         "username": "MtB_",
         "games": 17,
         "wins": 8,
-        "losses": 8,
-        "ties": 1,
         "kills": [
             12,
             4,
@@ -99,10 +93,8 @@
         "username": "swaglord",
         "games": 1,
         "wins": 1,
-        "losses": 0,
-        "ties": 0,
         "kills": [
-            5
+            500
         ],
         "deaths": [
             1
@@ -115,8 +107,6 @@
         "username": "Kai",
         "games": 2,
         "wins": 2,
-        "losses": 0,
-        "ties": 0,
         "kills": [
             2,
             111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -134,24 +124,20 @@
         "username": "papi",
         "games": 1,
         "wins": 0,
-        "losses": 0,
-        "ties": 0,
         "kills": [
-            0
+            5
         ],
         "deaths": [
-            0
+            4
         ],
         "assists": [
-            0
+            3
         ]
     },
     "239904268834963456": {
         "username": "ViPER",
         "games": 1,
         "wins": 1,
-        "losses": 0,
-        "ties": 0,
         "kills": [
             17
         ],

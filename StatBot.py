@@ -1,4 +1,4 @@
-# Work with Python 3.6
+#Takes discord inputs and generates outputs accordingly
 import os
 import discord
 import random
@@ -59,12 +59,18 @@ async def on_message(message):
                             data[username]['deaths'].append(death)
                             data[username]['assists'].append(assists)
                             if outcome.upper() == 'W':
-                                data[username]['wins'] += 1  
+                                data[username]['wins'] += 1
+                            if outcome.upper == 'L':
+                                data[username]['losses'] += 1
+                            if outcome.upper == 'T':
+                                data[username]['ties'] += 1                                 
                         else:
                             data[username] = {
                                 'username': re.sub(r'\W+', '', message.author.name),
                                 'games': 1,
                                 'wins': 0,
+                                'losses': 0,
+                                'ties': 0,
                                 'kills': [],
                                 'deaths': [],
                                 'assists': [],
@@ -73,7 +79,11 @@ async def on_message(message):
                             data[username]['deaths'].append(death)
                             data[username]['assists'].append(assists)
                             if outcome.upper() == 'W':
-                                data[username]['wins'] += 1      
+                                data[username]['wins'] += 1
+                            if outcome.upper == 'L':
+                                data[username]['losses'] += 1
+                            if outcome.upper == 'T':
+                                data[username]['ties'] += 1
 
                         await message.channel.send('Match Added.')
                         with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
