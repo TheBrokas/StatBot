@@ -14,10 +14,12 @@ import matplotlib.pyplot as plt
 #     with open('StatBotInfo.txt') as json_file:
 #         data = json.load(json_file)
 
-data = {1: 10,
-    2: 15,
-    3: 11,
-    4: 24
-}
-plt.plot(*zip(*sorted(data.items())))
-plt.show()
+# data = {1: 10,
+#     2: 15,
+#     3: 11,
+#     4: 24
+# }
+# plt.plot(*zip(*sorted(data.items())))
+# plt.show()
+day = 4
+print('today is ' + str(day))
