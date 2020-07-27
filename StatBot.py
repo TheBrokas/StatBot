@@ -4,10 +4,11 @@ import discord
 import random
 from discord.ext import commands
 import re
-
 import json
 import os.path
 from os import path
+from GraphGeneration import generate_daily_graph
+import time
 
 print('Bot Activated')
 
@@ -16,7 +17,7 @@ TOKEN = 'NzM1MjI2NTQ5MjgzODQ4MTky.XxdZjw.X2w65mC2vvA8LcTstBhbExz-Tt4'
 bot = commands.Bot(command_prefix='!')
 
 client = discord.Client()
-#start here 
+#start here
 
 @client.event
 async def on_message(message):
@@ -63,7 +64,7 @@ async def on_message(message):
                             if outcome.upper == 'L':
                                 data[username]['losses'] += 1
                             if outcome.upper == 'T':
-                                data[username]['ties'] += 1                                 
+                                data[username]['ties'] += 1
                         else:
                             data[username] = {
                                 'username': re.sub(r'\W+', '', message.author.name),
@@ -117,15 +118,31 @@ async def on_message(message):
                 await message.channel.send(stat_reply)
             else:
                 await message.channel.send('User not found')
-        
+
     if message.content.startswith('!help'):
         message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!mystats to check own stats. \n"!stats userid" to find user stats. \n!selfdestruct to close temporarily'
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
         username = re.sub(r'\W+', '', message.author.name)
-        message_reply = "nice try %s" % (username)      
+        message_reply = "nice try %s" % (username)
         await message.channel.send(message_reply)
+
+    if message.content.startswith('!dailygraph'):
+        username = str(message.author.id)
+        user_message = message.content
+        prefix,stat = user_message.split(' ')
+        if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists':
+            file_location,plt = generate_daily_graph(username,stat)
+            await message.channel.send(file=discord.File(file_location))
+            plt.clf
+            time.sleep(3)
+            os.remove(file_location)
+
+        else:
+            await message.channel.send('Invalid request. You are can request: wins, losses, ties, kills, deaths, assists.')
+
+
 
 def stat_calculator(names,kills,deaths,games,wins):
         name = names

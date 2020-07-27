@@ -55,6 +55,7 @@ else:
             daily_data[key]['ties'][current_day] = tie_count
             daily_data[key]['kills'][current_day] = kill_count
             daily_data[key]['deaths'][current_day] = death_count
+            daily_data[key]['assists'][current_day] = assist_count
             
 with open('daily_data.txt', 'w+', encoding='utf-8') as f:
      json.dump(daily_data, f, ensure_ascii=False, indent=3)
@@ -64,3 +65,7 @@ if path.exists("StatBotInfo.txt") == True:
     new_path = shutil.move(source,destination)
     Current_date = datetime.datetime.today().strftime ('%d-%b-%Y')
     os.rename(r'C:\Users\dargi\Desktop\Coding\ValorantBot\DataStorage\StatBotInfo.txt',r'C:\Users\dargi\Desktop\Coding\ValorantBot\DataStorage\StatBotInfo_day' + str(current_day)+ '_' + str(Current_date) + '.txt')
+    #Update Current Day Count
+    current_day += 1
+    with open('daycount.txt', 'w+', encoding='utf-8') as f:
+        json.dump(current_day, f, ensure_ascii=False, indent=3)

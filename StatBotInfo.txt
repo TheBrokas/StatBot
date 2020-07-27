@@ -1,0 +1,37 @@
+{
+    "90559730715467776": {
+        "username": "MtB_",
+        "games": 2,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "kills": [
+            22,
+            13
+        ],
+        "deaths": [
+            21,
+            11
+        ],
+        "assists": [
+            5,
+            3
+        ]
+    },
+    "173260985111543808": {
+        "username": "Brokas",
+        "games": 1,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "kills": [
+            23
+        ],
+        "deaths": [
+            9
+        ],
+        "assists": [
+            7
+        ]
+    }
+}

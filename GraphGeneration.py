@@ -10,16 +10,22 @@ import matplotlib.pyplot as plt
 # plt.xlabel('Months')
 # plt.ylabel('Numbers')
 # plt.show()
-# if path.exists("StatBotInfo.txt") == True:
-#     with open('StatBotInfo.txt') as json_file:
-#         data = json.load(json_file)
+
 
 # data = {1: 10,
 #     2: 15,
 #     3: 11,
 #     4: 24
 # }
-# plt.plot(*zip(*sorted(data.items())))
-# plt.show()
-day = 4
-print('today is ' + str(day))
+def generate_daily_graph(user_id,stat):
+    with open('daily_data.txt') as json_file:
+        daily_data = json.load(json_file)
+    data = daily_data[user_id][stat]
+    plt.plot(*zip(*sorted(data.items())), marker = 'o')
+    plt.xlabel('Day')
+    plt.ylabel(stat.upper())
+    plt.ylim(ymin=0)
+    file_location = str(user_id) + '_' + str(stat) + '_graph.png'
+    plt.savefig(file_location)
+    return file_location, plt.figure()
+#generate_daily_graph('90559730715467776','kills')
