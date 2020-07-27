@@ -120,7 +120,11 @@ async def on_message(message):
                 await message.channel.send('User not found')
 
     if message.content.startswith('!help'):
-        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!mystats to check own stats. \n"!stats userid" to find user stats. \n!selfdestruct to close temporarily'
+        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!mystats to check own stats. \n"!stats userid" to find user stats. \n!selfdestruct to close temporarily. \n!graphs for help with graphs.'
+        await message.channel.send(message_reply)
+
+    if message.content.startswith('!graphs'):
+        message_reply = "!dailygraph STAT to see graph of stats. Replace STAT with items such as wins, losses, ties, kills, deaths, assists, KD, win rate."
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
@@ -132,15 +136,14 @@ async def on_message(message):
         username = str(message.author.id)
         user_message = message.content
         prefix,stat = user_message.split(' ')
-        if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists':
+        if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists' or stat == 'KD' or stat == 'winrate':
             file_location,plt = generate_daily_graph(username,stat)
             await message.channel.send(file=discord.File(file_location))
             plt.clf
             time.sleep(3)
             os.remove(file_location)
-
         else:
-            await message.channel.send('Invalid request. You are can request: wins, losses, ties, kills, deaths, assists.')
+            await message.channel.send('Invalid request. You are can request: wins, losses, ties, kills, deaths, assists, KD, winrate.')
 
 
 

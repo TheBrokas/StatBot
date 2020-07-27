@@ -21,6 +21,7 @@ def generate_daily_graph(user_id,stat):
     with open('daily_data.txt') as json_file:
         daily_data = json.load(json_file)
     data = daily_data[user_id][stat]
+    plt.style.use('dark_background')
     plt.plot(*zip(*sorted(data.items())), marker = 'o')
     plt.xlabel('Day')
     plt.ylabel(stat.upper())
