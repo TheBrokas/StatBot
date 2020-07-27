@@ -11,8 +11,9 @@ from GraphGeneration import generate_daily_graph
 import time
 
 print('Bot Activated')
-
-TOKEN = 'NzM1MjI2NTQ5MjgzODQ4MTky.XxdZjw.X2w65mC2vvA8LcTstBhbExz-Tt4'
+with open('token.txt') as token_file:
+    token_id = json.load(token_file)
+TOKEN = token_id
 
 bot = commands.Bot(command_prefix='!')
 
@@ -133,11 +134,12 @@ async def on_message(message):
         await message.channel.send(message_reply)
 
     if message.content.startswith('!dailygraph'):
+        user_name = message.author.name
         username = str(message.author.id)
         user_message = message.content
         prefix,stat = user_message.split(' ')
         if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists' or stat == 'KD' or stat == 'winrate':
-            file_location,plt = generate_daily_graph(username,stat)
+            file_location,plt = generate_daily_graph(username,stat,user_name)
             await message.channel.send(file=discord.File(file_location))
             plt.clf
             time.sleep(3)
