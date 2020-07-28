@@ -54,18 +54,9 @@ async def on_message(message):
                         death = abs(int(death_str))
                         assists = abs(int(assists_str))
                         if str(username) in data:
-                            print('user found')
                             data[username]['username'] = re.sub(r'\W+', '', message.author.name)
                             data[username]['games'] += 1
-                            data[username]['kills'].append(kill)
-                            data[username]['deaths'].append(death)
-                            data[username]['assists'].append(assists)
-                            if outcome.upper() == 'W':
-                                data[username]['wins'] += 1
-                            if outcome.upper == 'L':
-                                data[username]['losses'] += 1
-                            if outcome.upper == 'T':
-                                data[username]['ties'] += 1
+                            update_stats_from_input(data,username,kill,death,assists,outcome)
                         else:
                             data[username] = {
                                 'username': re.sub(r'\W+', '', message.author.name),
@@ -77,15 +68,8 @@ async def on_message(message):
                                 'deaths': [],
                                 'assists': [],
                             }
-                            data[username]['kills'].append(kill)
-                            data[username]['deaths'].append(death)
-                            data[username]['assists'].append(assists)
-                            if outcome.upper() == 'W':
-                                data[username]['wins'] += 1
-                            if outcome.upper == 'L':
-                                data[username]['losses'] += 1
-                            if outcome.upper == 'T':
-                                data[username]['ties'] += 1
+                            update_stats_from_input(data.username,kill,death,assists,outcome)
+
 
                         await message.channel.send('Match Added.')
                         with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
@@ -147,8 +131,6 @@ async def on_message(message):
         else:
             await message.channel.send('Invalid request. You are can request: wins, losses, ties, kills, deaths, assists, KD, winrate.')
 
-
-
 def stat_calculator(names,kills,deaths,games,wins):
         name = names
         total_kills = kills
@@ -165,4 +147,12 @@ def stat_calculator(names,kills,deaths,games,wins):
             kd = total_kills
         return name,win_rate,kd,total_games
 
+def update_stats_from_input(data,username,kills,deaths,assists,game_outcome):
+    data[username]['kills'].append(kills)
+    data[username]['deaths'].append(deaths)
+    data[username]['assists'].append(assists)
+    if game_outcome.upper() == 'W':data[username]['wins'] += 1
+    if game_outcome.upper() == 'L':data[username]['losses'] += 1
+    if game_outcome.upper() == 'T':data[username]['ties'] += 1
+        
 client.run(TOKEN)
