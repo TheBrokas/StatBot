@@ -1,17 +1,29 @@
 {
     "173260985111543808": {
         "username": "Brokas",
-        "games": 1,
-        "wins": 0,
-        "losses": 1,
+        "games": 5,
+        "wins": 2,
+        "losses": 3,
         "ties": 0,
         "kills": [
-            16
+            5,
+            6,
+            6,
+            5,
+            5
         ],
         "deaths": [
-            16
+            5,
+            3,
+            3,
+            4,
+            4
         ],
         "assists": [
+            5,
+            8,
+            8,
+            8,
             8
         ]
     }
