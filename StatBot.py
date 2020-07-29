@@ -22,8 +22,7 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
+    if message.author == client.user: return
 
     if message.content.startswith('!addmatch'):
         if path.exists("StatBotInfo.txt") == True:
@@ -33,32 +32,28 @@ async def on_message(message):
             try:
                 prefix,match_info=user_message.split(' ')
             except:
-                print('value error msg')
                 await message.channel.send('Invalid input, try again.')
             else:
-                username = str(message.author.id)
-                #await message.channel.send(content)
+                userid,username = message_username_userid(message)
                 try:
                     outcome,kda = match_info.split('-')
                 except:
-                    print('value error msg')
                     await message.channel.send('Invalid input, try again.')
                 else:
                     try:
                         kill_str,death_str,assists_str = kda.split('/')
                     except:
-                        print('value error msg')
                         await message.channel.send('Invalid input, try again.')
                     if kill_str.isnumeric() and death_str.isnumeric() and assists_str.isnumeric():
                         kill = abs(int(kill_str))
                         death = abs(int(death_str))
                         assists = abs(int(assists_str))
-                        if str(username) in data:
-                            data[username]['username'] = re.sub(r'\W+', '', message.author.name)
-                            data[username]['games'] += 1
-                            update_stats_from_input(data,username,kill,death,assists,outcome)
+                        if str(userid) in data:
+                            data[userid]['username'] = re.sub(r'\W+', '', message.author.name)
+                            data[userid]['games'] += 1
+                            update_stats_from_input(data,userid,kill,death,assists,outcome)
                         else:
-                            data[username] = {
+                            data[userid] = {
                                 'username': re.sub(r'\W+', '', message.author.name),
                                 'games': 1,
                                 'wins': 0,
@@ -68,9 +63,7 @@ async def on_message(message):
                                 'deaths': [],
                                 'assists': [],
                             }
-                            update_stats_from_input(data.username,kill,death,assists,outcome)
-
-
+                            update_stats_from_input(data,userid,kill,death,assists,outcome)
                         await message.channel.send('Match Added.')
                         with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
                             json.dump(data, f, ensure_ascii=False, indent=4)
@@ -84,21 +77,21 @@ async def on_message(message):
                 json.dump(data, f, ensure_ascii=False, indent=4)
 
     if message.content == '!mystats':
-        username = str(message.author.id)
+        userid,username = message_username_userid(message)
         with open('StatBotInfo.txt') as json_file:
             data = json.load(json_file)
-            name,win_rate,kd,total_games = stat_calculator(data[username]['username'],data[username]['kills'],data[username]['deaths'],data[username]['games'],data[username]['wins'])
+            name,win_rate,kd,total_games = stat_calculator(data[userid]['username'],data[userid]['kills'],data[userid]['deaths'],data[userid]['games'],data[userid]['wins'])
         stat_reply = '%s: \nGames Played: %s \nWin Percent: %s \nKD: %s' % (name, total_games, win_rate, kd)
         await message.channel.send(stat_reply)
 
     if message.content.startswith('!stats'):
         find_user = message.content
-        prefix,username = find_user.split(' ')
+        prefix,userid = find_user.split(' ')
         with open('StatBotInfo.txt') as json_file:
             data = json.load(json_file)
-            if str(username) in data:
+            if str(userid) in data:
                 with open('StatBotInfo.txt') as json_file:
-                    name,win_rate,kd,total_games = stat_calculator(data[username]['username'],data[username]['kills'],data[username]['deaths'],data[username]['games'],data[username]['wins'])
+                    name,win_rate,kd,total_games = stat_calculator(data[userid]['username'],data[userid]['kills'],data[userid]['deaths'],data[userid]['games'],data[userid]['wins'])
                 stat_reply = '%s: \nGames Played: %s \nWin Percent: %s \nKD: %s' % (name, total_games, win_rate, kd)
                 await message.channel.send(stat_reply)
             else:
@@ -113,17 +106,16 @@ async def on_message(message):
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
-        username = re.sub(r'\W+', '', message.author.name)
-        message_reply = "nice try %s" % (username)
+        userid,username = message_username_userid(message)
+        message_reply = "nice try %s aka %s" % (username,userid)
         await message.channel.send(message_reply)
 
     if message.content.startswith('!dailygraph'):
-        user_name = message.author.name
-        username = str(message.author.id)
+        userid,username = message_username_userid(message)
         user_message = message.content
         prefix,stat = user_message.split(' ')
         if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists' or stat == 'KD' or stat == 'winrate':
-            file_location,plt = generate_daily_graph(username,stat,user_name)
+            file_location,plt = generate_daily_graph(userid,stat,username)
             await message.channel.send(file=discord.File(file_location))
             plt.clf
             time.sleep(3)
@@ -147,12 +139,17 @@ def stat_calculator(names,kills,deaths,games,wins):
             kd = total_kills
         return name,win_rate,kd,total_games
 
-def update_stats_from_input(data,username,kills,deaths,assists,game_outcome):
-    data[username]['kills'].append(kills)
-    data[username]['deaths'].append(deaths)
-    data[username]['assists'].append(assists)
-    if game_outcome.upper() == 'W':data[username]['wins'] += 1
-    if game_outcome.upper() == 'L':data[username]['losses'] += 1
-    if game_outcome.upper() == 'T':data[username]['ties'] += 1
-        
+def update_stats_from_input(data,userid,kills,deaths,assists,game_outcome):
+    data[userid]['kills'].append(kills)
+    data[userid]['deaths'].append(deaths)
+    data[userid]['assists'].append(assists)
+    if game_outcome.upper() == 'W':data[userid]['wins'] += 1
+    if game_outcome.upper() == 'L':data[userid]['losses'] += 1
+    if game_outcome.upper() == 'T':data[userid]['ties'] += 1
+
+def message_username_userid(message):
+    userid = message.author.id
+    username = re.sub(r'\W+', '', message.author.name)
+    return userid,username
+
 client.run(TOKEN)
