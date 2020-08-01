@@ -9,6 +9,7 @@ import os.path
 from os import path
 from GraphGeneration import generate_daily_graph
 import time
+from datetime import datetime
 
 print('Bot Activated')
 with open('token.txt') as token_file:
@@ -24,6 +25,7 @@ client = discord.Client()
 async def on_message(message):
     if message.author == client.user: return
     if message.content.startswith('!addmatch'):
+        save_input(message)
         if path.exists("StatBotInfo.txt") == True:
             with open('StatBotInfo.txt') as json_file:
                 data = json.load(json_file)
@@ -65,7 +67,7 @@ async def on_message(message):
 
     if message.content.startswith('!stats'):
         find_user = message.content
-        prefix,userid = find_user.split(' ')
+        _prefix,userid = find_user.split(' ')
         with open('StatBotInfo.txt') as json_file:
             data = json.load(json_file)
             if str(userid) in data:
@@ -85,6 +87,7 @@ async def on_message(message):
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
+        save_input(message)
         userid,username = message_username_userid(message)
         message_reply = "nice try %s aka %s" % (username,userid)
         await message.channel.send(message_reply)
@@ -92,7 +95,7 @@ async def on_message(message):
     if message.content.startswith('!dailygraph'):
         userid,username = message_username_userid(message)
         user_message = message.content
-        prefix,stat = user_message.split(' ')
+        _prefix,stat = user_message.split(' ')
         if stat == 'wins' or stat == 'losses' or stat == 'ties' or stat == 'kills' or stat == 'deaths' or stat == 'assists' or stat == 'KD' or stat == 'winrate':
             file_location,plt = generate_daily_graph(userid,stat,username)
             await message.channel.send(file=discord.File(file_location))
@@ -107,9 +110,9 @@ async def on_message(message):
         except: await message.channel.send('Invalid input, try again.')
         else:
             remove_matchadd(userid,kill,death,assists,outcome)
+            await message.channel.send('Match Deleted')
 
-
-def stat_calculator(names,kills,deaths,games,wins):
+def stat_calculator(names,kills,deaths,games,wins): #Calculate stats
         name = names
         total_kills = kills
         total_kills = sum(total_kills)
@@ -138,22 +141,21 @@ def message_username_userid(message): #Finds the messangers username and userid
     username = re.sub(r'\W+', '', message.author.name)
     return userid,username
 
-def remove_matchadd(userid,kill,death,assist,game_outcome): #Removes the most recently added match
+def remove_matchadd(userid,kill,death,assist,game_outcome): #Removes specified match
     with open('StatBotInfo.txt') as json_file:
         data = json.load(json_file)
-        data[userid]['kills'].pop()
+        data[userid]['kills'].remove(kill)
         data[userid]['deaths'].remove(death)
         data[userid]['assists'].remove(assist)
         if game_outcome.upper() == 'W':data[userid]['wins'] -= 1
         if game_outcome.upper() == 'L':data[userid]['losses'] -= 1
         if game_outcome.upper() == 'T':data[userid]['ties'] -= 1
-        print("removing match")
-        print("kill:")
-        print(kill)
+        with open('StatBotInfo.txt', 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
 
 def split_user_input(message): #Takes the user input and divides it into corresponding variables.
     user_message = message.content
-    prefix,match_info=user_message.split(' ')
+    _prefix,match_info=user_message.split(' ')
     userid,username = message_username_userid(message)
     outcome,kda = match_info.split('-')
     kill_str,death_str,assists_str = kda.split('/')
@@ -162,4 +164,23 @@ def split_user_input(message): #Takes the user input and divides it into corresp
     assists = abs(int(assists_str))
     return kill,death,assists,outcome,userid,username
 
+def save_input(message):
+    if path.exists('UserInputs.txt') == False:
+        user_inputs = {}
+        with open('UserInputs.txt', 'w', encoding='utf-8') as f:
+            json.dump(user_inputs, f, ensure_ascii=False, indent=4)
+
+    userid,_username = message_username_userid(message)
+    current_date  = datetime.date(datetime.now())
+    current_date = str(current_date)
+    user_message = message.content
+    with open('UserInputs.txt') as json_file:
+        user_inputs = json.load(json_file)
+    if str(userid) not in user_inputs: user_inputs[userid] = {}
+    if current_date not in user_inputs[userid]: user_inputs[userid][current_date] = [user_message]  
+    else: user_inputs[userid][current_date].append(user_message)
+
+    with open('UserInputs.txt', 'w', encoding='utf-8') as f:
+        json.dump(user_inputs, f, ensure_ascii=False, indent=4)
+   
 client.run(TOKEN)
