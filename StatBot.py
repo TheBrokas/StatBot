@@ -79,17 +79,20 @@ async def on_message(message):
                 await message.channel.send('User not found')
 
     if message.content.startswith('!help'):
-        message_reply = '!addmatch to add match. Format it as: !addmatch W-K/D/A where W is Win and L if loss. \n!mystats to check own stats. \n"!stats userid" to find user stats. \n!selfdestruct to close temporarily. \n!graphs for help with graphs.'
+        message_reply = '**!addmatch *outcome*-*kills*/*deaths*/*assists* ** to add match. ex: !addmatch W-19/12/5 where W is win, L if loss, T if tie.\
+        \n**!mystats** to check own stats.\
+        \n**!stats *userid* ** to find user stats, where userid is a users discord id.\
+        \n**!selfdestruct** to close temporarily.\
+        \n**!graphs** for help with graphs.'
         await message.channel.send(message_reply)
 
     if message.content.startswith('!graphs'):
-        message_reply = "!dailygraph STAT to see graph of stats. Replace STAT with items such as wins, losses, ties, kills, deaths, assists, KD, win rate."
+        message_reply = "**!dailygraph *stat* ** to see graph of stats. Replace *stat* with items such as wins, losses, ties, kills, deaths, assists, KD, winrate."
         await message.channel.send(message_reply)
 
     if message.content.startswith('!selfdestruct'):
-        save_input(message)
         userid,username = message_username_userid(message)
-        message_reply = "nice try %s aka %s" % (username,userid)
+        message_reply = "nice **try** %s aka %s" % (username,userid)
         await message.channel.send(message_reply)
 
     if message.content.startswith('!dailygraph'):
@@ -164,7 +167,7 @@ def split_user_input(message): #Takes the user input and divides it into corresp
     assists = abs(int(assists_str))
     return kill,death,assists,outcome,userid,username
 
-def save_input(message):
+def save_input(message): #Saves the user command input
     if path.exists('UserInputs.txt') == False:
         user_inputs = {}
         with open('UserInputs.txt', 'w', encoding='utf-8') as f:

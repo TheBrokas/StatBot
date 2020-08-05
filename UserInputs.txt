@@ -2,7 +2,15 @@
     "173260985111543808": {
         "2020-07-31": [
             "!addmatch W-5/4/8",
-            "!addmatch W-6/6/6"
+            "!addmatch W-6/6/6",
+            "!selfdestruct"
+        ],
+        "2020-08-05": [
+            "!addmatch W-20/13/3",
+            "!addmatch w-22/16/6",
+            "!addmatch L-22/18/4",
+            "!addmatch L-21/18/7",
+            "!addmatch W-24/12/5"
         ]
     }
 }
